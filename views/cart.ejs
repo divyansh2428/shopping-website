@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+      
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+      <style type="text/css">
+      
+          .container{
+              
+              margin: 20px;
+          }
+      
+      
+      </style>
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    
+      
+       <!--navbar-->
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="/">Books</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              
+                <li class="nav-item active">
+                <a class="nav-link" href="/signup">Sign Up<span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Log In</a>
+              </li>
+              <li class="nav-item">
+                      <a class="nav-link" href="/viewcart">Your cart</a>
+              </li>
+                
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/viewcart">Your Cart</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+             
+            </ul>
+              <div id="form">
+                  
+                  <form class="form-inline my-2 my-lg-0" method="post" action="/search">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                  
+                </div>
+              
+              
+          </div>
+        </nav>
+            
+      <div class="container">
+  
+        <div class="row">
+        <div class="col-8">
+          <% var c=0;
+            var sum=0;
+
+          %>
+          <% for(var i=0;i<items.length;i++){ 
+              c++;%>
+            <div class="row" style="margin-top: 50px; border: 1px solid lightgray; padding: 15px;">
+
+              <div class="col-3">
+                  <a href="/description/<%=items[i].id%>"><img src="<%= items[i].url %>" style="width: 250px; height: 275px; "></a>
+              </div>
+
+              <div class="col" style="margin-left: 140px;">
+                    <h3><a href="/description/<%=items[i].id%>"><%= items[i].name %></a></h3>
+                      <% sum+=items[i].price * items[i].frequency %>
+                      <h4>x <%= items[i].frequency %></h4>
+                      <div style="display: inline;">
+                        <h5><i class="fas fa-plus-square add" data-id-type='<%=items[i].product_id%>' data-frequency-type='<%=items[i].frequency%>'></i> 
+                       <i class="fas fa-minus-circle subtract" data-id-type='<%=items[i].product_id%>' data-frequency-type='<%=items[i].frequency%>'></i></h5>
+                    </div>
+
+                    <br><br>
+                    <h4>Price: <%= items[i].price %><i class="fas fa-rupee-sign"></i></h4>
+              </div>
+
+            </div>
+
+          <% } %>
+
+        </div>
+
+        <div class="col-4">
+
+            <h3>SUMMARY</h3>
+            <hr>
+            <h5>Total Items: <%= c%></h5>
+            <br>
+            <h5>Total price: <%= sum %></h5>
+            <hr>
+            <a href="/placeorder"><button class="btn btn-success">Place Order</button></a>
+        </div>
+      </div>
+        
+      </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <script >
+  
+    
+    $(".subtract").click(function(){
+
+      var user_id=1;
+    //var id=JSON.stringify(this.getAttribute("data-id-type"));
+    //var freq=JSON.stringify(this.getAttribute("data-frequency-type"));
+    var id=(this.getAttribute("data-id-type"));
+    var freq=(this.getAttribute("data-frequency-type"));
+  
+    $.post({
+
+        url: "/decrease",
+        data: "productid=" + id +"&freq=" +freq + "&userid="+ user_id,
+        success: function(result){
+
+          $.get("/viewcart");
+        }
+
+    })
+    window.location.reload();
+    })
+
+     $(".add").click(function(){
+
+var user_id=1;
+//var id=JSON.stringify(this.getAttribute("data-id-type"));
+//var freq=JSON.stringify(this.getAttribute("data-frequency-type"));
+var id=(this.getAttribute("data-id-type"));
+var freq=(this.getAttribute("data-frequency-type"));
+console.log("Id is" + id);
+
+$.post({
+
+  url: "/increase",
+  data: "productid=" + id +"&freq=" +freq + "&userid="+ user_id,
+  success: function(result){
+
+    
+
+  }
+
+})
+
+window.location.reload();
+})
+  
+  </script>
+  
+  </body>
+</html>
