@@ -97,6 +97,7 @@ app.post("/decrease",function(req,res){
     console.log(user_id);
     console.log("product id is " + product_id);
     console.log("Frequency is " + freq);
+    if(freq>0){
     connection.query(
         "update cart set frequency='"+freq+"' where user_id='"+user_id+"' and product_id='"+product_id+"'",
           function(err, results, fields) {
@@ -109,7 +110,25 @@ app.post("/decrease",function(req,res){
                 //res.redirect("/viewcart");
             }
           }
-        );
+        );}
+
+        else{
+
+          connection.query(
+            "delete from cart where user_id='"+user_id+"' and product_id='"+product_id+"'",
+              function(err, results, fields) {
+                  if(err)
+                  console.log(err);
+                else{
+                
+                 // results contains rows returned by server // fields contains extra meta data about results, if available
+                 
+                    //res.redirect("/viewcart");
+                    console.log("Deleted");
+                }
+              }
+            );
+        }
 
 })
 
@@ -306,8 +325,9 @@ app.post("/additem",function(req,res){
               if(err)
               console.log(err);
             else{
-                console.log("Inserted item in db");
+                alert("Inserted item in db");
              // results contains rows returned by server // fields contains extra meta data about results, if available
+
              res.redirect("/admin");
             }
           }

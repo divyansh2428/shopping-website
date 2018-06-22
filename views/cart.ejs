@@ -72,6 +72,8 @@
             
       <div class="container">
   
+       <%  if(items.length>0)
+        { %>
         <div class="row">
         <div class="col-8">
           <% var c=0;
@@ -87,7 +89,7 @@
               </div>
 
               <div class="col" style="margin-left: 140px;">
-                    <h3><a href="/description/<%=items[i].id%>"><%= items[i].name %></a></h3>
+                    <h3><a href="/description/<%=items[i].product_id%>"><%= items[i].name %></a></h3>
                       <% sum+=items[i].price * items[i].frequency %>
                       <h4>x <%= items[i].frequency %></h4>
                       <div style="display: inline;">
@@ -98,7 +100,7 @@
                     <br><br>
                     <h4>Price: <%= items[i].price %><i class="fas fa-rupee-sign"></i></h4>
               </div>
-
+              <!--asda-->
             </div>
 
           <% } %>
@@ -116,7 +118,12 @@
             <a href="/placeorder"><button class="btn btn-success">Place Order</button></a>
         </div>
       </div>
-        
+    <% }
+    else{ %>
+      <h1>Your Cart is empty</h1>
+      <a href="/"><button class="btn btn-primary">Continue Shopping</button></a>
+    <% } %>
+
       </div>
 
     <!-- Optional JavaScript -->
