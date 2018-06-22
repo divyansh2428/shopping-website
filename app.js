@@ -187,67 +187,62 @@ app.get("/addtocart/:id",function(req,res){
     var product_id=req.params.id;
 
     connection.query(
-        "select * from cart where user_id='"+ user_id +"' and product_id='"+product_id+"' ",
-          function(err, results, fields) {
-              if(err)
-              console.log(err);
-            else{
+      "select * from cart where user_id='"+user_id+"' and product_id='"+product_id+"' ",
+        function(err, results, fields) {
+            if(err)
+            console.log(err);
+          else{
+          
+           // results contains rows returned by server // fields contains extra meta data about results, if available
+           if(results.length>0){
+
+              var f=results[0].frequency;
+              f++;
+              connection.query(
+                "update cart set frequency='"+f+"' where user_id='"+user_id+"' and product_id='"+product_id+"'",
+                  function(err, results, fields) {
+                      if(err)
+                      console.log(err);
+                    else{
+                    
+                     // results contains rows returned by server // fields contains extra meta data about results, if available
+                     
+                      res.redirect("/viewcart");
+                    }
+                  }
+                );              
+
+
+           }
+           else
+           {
+            connection.query(
+              "select * from items where id='"+product_id+"'",
+                function(err, result, fields) {
+                    if(err)
+                    console.log(err);
+                  else{
+                      connection.query(
+                          "insert into cart(user_id,product_id,name,price,url,frequency) values('"+user_id+"','"+product_id+"','"+result[0].name+"','"+result[0].price+"','"+result[0].url+"','"+ 1 +"')",
+                            function(err, results, fields) {
+                                if(err)
+                                console.log(err);
+                              else{
+                                res.redirect('/viewcart');
+                              }
+                            }
+                          );
+                  }
+                }
+              );
+           }
+           
+           
             
-             // results contains rows returned by server // fields contains extra meta data about results, if available
-                
-             if(results.length>0){
-
-                var f=results[0].frequency;
-                f++;
-                connection.query(
-                    "update cart set frequency='"+ f +"' where user_id='"+user_id+"' and product_id='"+product_id+"'",
-                      function(err, results, fields) {
-                          if(err)
-                          console.log(err);
-                        else{
-                        
-                         // results contains rows returned by server // fields contains extra meta data about results, if available
-                         
-                        
-                        }
-                      }
-                    );
-
-                    res.redirect("/viewcart");
-
-
-
-             }
-             else{
-
-                connection.query(
-                    "select * from items where id='"+product_id+"'",
-                      function(err, result, fields) {
-                          if(err)
-                          console.log(err);
-                        else{
-                            connection.query(
-                                "insert into cart(user_id,product_id,name,price,url,frequency) values('"+user_id+"','"+product_id+"','"+result[0].name+"','"+result[0].price+"','"+result[0].url+"','"+ 1 +"')",
-                                  function(err, results, fields) {
-                                      if(err)
-                                      console.log(err);
-                                    else{
-                                    
-                                    }
-                                  }
-                                );
-                        }
-                      }
-                    );
-
-             }
-             
-            }
           }
-        );
+        }
+      );
 
-
-    
    
 
                 
