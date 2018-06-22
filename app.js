@@ -320,7 +320,7 @@ app.post("/additem",function(req,res){
               if(err)
               console.log(err);
             else{
-                alert("Inserted item in db");
+                
              // results contains rows returned by server // fields contains extra meta data about results, if available
 
              res.redirect("/admin");
