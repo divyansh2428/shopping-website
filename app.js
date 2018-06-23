@@ -12,6 +12,12 @@ const connection = mysql.createConnection({
   password: 'divyansh2428@'
 });
  
+
+// admin-emailid: admin@gmail.com
+// admin-password: admin
+// single user admin system
+
+
 connection.query(
   `create database if not exists shop`,
     function(err, results, fields) {
@@ -151,7 +157,7 @@ app.get("/viewcart",function(req,res){
 
 })
 
-app.get("/addtocart/:id",function(req,res){
+/*app.get("/addtocart/:id",function(req,res){
 
     var user_id=1;
     var product_id=req.params.id;
@@ -179,43 +185,28 @@ app.get("/addtocart/:id",function(req,res){
                 
         res.redirect("/viewcart");
 
-})
+})*/
 
-/*app.get("/addtocart/:id",function(req,res){
+app.get("/addtocart/:id",function(req,res){
 
-    var user_id=1;
-    var product_id=req.params.id;
+  var user_id=1;
+  var product_id=req.params.id;
 
-    connection.query(
-      "select * from cart where user_id='"+user_id+"' and product_id='"+product_id+"' ",
-        function(err, results, fields) {
-            if(err)
-            console.log(err);
+  connection.query(
+    "select * from cart where user_id='"+user_id+"' and product_id='"+product_id+"'",
+      function(err, results, fields) {
+          if(err)
+          console.log(err);
+        else{
+        
+         // results contains rows returned by server // fields contains extra meta data about results, if available
+          if(results.length>0){
+
+              res.redirect("/viewcart");
+              //redirected
+          }
           else{
-          
-           // results contains rows returned by server // fields contains extra meta data about results, if available
-           if(results.length>0){
 
-              var f=results[0].frequency;
-              f++;
-              connection.query(
-                "update cart set frequency='"+f+"' where user_id='"+user_id+"' and product_id='"+product_id+"'",
-                  function(err, results, fields) {
-                      if(err)
-                      console.log(err);
-                    else{
-                    
-                     // results contains rows returned by server // fields contains extra meta data about results, if available
-                     
-                      res.redirect("/viewcart");
-                    }
-                  }
-                );              
-
-
-           }
-           else
-           {
             connection.query(
               "select * from items where id='"+product_id+"'",
                 function(err, result, fields) {
@@ -228,27 +219,31 @@ app.get("/addtocart/:id",function(req,res){
                                 if(err)
                                 console.log(err);
                               else{
-                                res.redirect('/viewcart');
+                                res.redirect("/viewcart");
                               }
                             }
                           );
                   }
                 }
               );
-           }
-           
-           
-            
+      
+                      
+              
+      
+      }
+
           }
+
         }
-      );
+      
+    );
 
-   
+              
+     
 
-                
-        res.redirect("/viewcart");
+})
 
-})*/
+
 
 app.post("/search",function(req,res){
 
